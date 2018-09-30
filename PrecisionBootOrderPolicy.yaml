@@ -1,0 +1,20 @@
+---
+# shared policies, use localhost so these tasks only run once
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    api_info: &api_info
+      api_private_key: "/Users/anganapa/Downloads/SecretKey-2.txt"
+      api_key_id: "5a3404ac3768393836093cab/5b9c01db663471746d8faa10/5bacfd44366b683064f747c7"
+    boot_policy_name: vmedia-hdd
+    resource_state: present
+  tasks:
+  -   name: Configure Precision Boot Order
+      intersight_rest_api:
+        <<: *api_info
+      resource_path: /boot/PrecisionPolicies
+      query_params:
+        $filter: "Name eq '{{ boot_policy_name }}'"
+     
+      state: "{{ resource_state }}"
